@@ -11,9 +11,8 @@ const SUBREDDIT_PARAM_MISSING_ERROR = 'subreddit parameter is missing!';
 const INVALID_JSON_STRUCT_ERROR = "Invalid JSON structure!";
 const UNAVAILABLE_JSON_FILE_ERROR = 'JSON isnt available!';
 const PROBLEM_FETCHING_DATA_ERROR = 'Problem with fetching JSON data:';
-const URL_RETRIEVE_FROM = `https://www.reddit.com/r/${subreddit}/top.json`;
 
-// Fire up my API into the server
+// Fire up the API into the server
 app.listen(PORT,
     () => console.log(`It is online on : http://localhost:${PORT}`)
 )
@@ -24,7 +23,7 @@ app.use(express.json());
 /**
  * Process the given JSON data: Deletes all the irrelevant information,
  * and saves the titles and the url(links) of the post
- * @param jsonData
+ * @param jsonData The subredditData.data.data as a JSON
  * @returns {*[]} An array of titles and their url array
  */
 const sanitizeRedditData = (jsonData) => {
@@ -69,19 +68,19 @@ const sanitizeRedditData = (jsonData) => {
  */
 app.get('/r/:subreddit/top', (req, res) => {
     const {subreddit} = req.params;
-    const fullUrl = URL_RETRIEVE_FROM;
+    const fullUrl = `https://www.reddit.com/r/${subreddit}/top.json`;
     if (!subreddit) {
         res.status(400).send({message: SUBREDDIT_PARAM_MISSING_ERROR});
     }
     let jsonData, jsonObject;
     axios.get(fullUrl).then(response => {
         jsonData = response.data.data
-        titlesArray = sanitizeRedditData(jsonData)
-        if (!titlesArray) {
+        relevantInfoArray = sanitizeRedditData(jsonData)
+        if (!relevantInfoArray) {
             res.status(500).send({message: INVALID_JSON_STRUCT_ERROR});
         } else {
             if (jsonData) {
-                jsonObject = {titles: titlesArray}
+                jsonObject = {"Titles, Urls": relevantInfoArray}
                 res.status(200).send({
                     jsonObject
                 })
@@ -93,4 +92,6 @@ app.get('/r/:subreddit/top', (req, res) => {
         console.error(PROBLEM_FETCHING_DATA_ERROR, error);
     });
 });
+
+module.exports = {sanitizeRedditData};
 
