@@ -16,9 +16,17 @@ const sanitizeRedditData = (jsonData) => {
         const childrenArray = jsonData.children;
         childrenArray.forEach(child => {
             const childData = child.data;
+            if (!child.data || !childData[TITLE] ) {
+                titlesAndUrlArr= null;
+                return null;
+            }
             const title = childData[TITLE];
-            const url = childData[URL];
-            titlesAndUrlArr.push([title, url]);
+            if (!childData[URL]) {
+                titlesAndUrlArr.push([title]);
+            } else {
+                const url = childData[URL];
+                titlesAndUrlArr.push([title, url]);
+            }
         });
         return titlesAndUrlArr;
     } else {

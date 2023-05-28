@@ -11,6 +11,7 @@ const SUBREDDIT_PARAM_MISSING_ERROR = 'subreddit parameter is missing!';
 const INVALID_JSON_STRUCT_ERROR = "Invalid JSON structure!";
 const UNAVAILABLE_JSON_FILE_ERROR = 'JSON isnt available!';
 const PROBLEM_FETCHING_DATA_ERROR = 'Problem with fetching JSON data:';
+TITLES_AND_URLS = "Titles, Urls";
 
 // Fire up the API into the server
 app.listen(PORT,
@@ -32,9 +33,17 @@ const sanitizeRedditData = (jsonData) => {
         const childrenArray = jsonData.children;
         childrenArray.forEach(child => {
             const childData = child.data;
+            if (!child.data || !childData[TITLE] ) {
+                titlesAndUrlArr= null;
+                return null;
+            }
             const title = childData[TITLE];
-            const url = childData[URL];
-            titlesAndUrlArr.push([title, url]);
+            if (!childData[URL]) {
+                titlesAndUrlArr.push([title]);
+            } else {
+                const url = childData[URL];
+                titlesAndUrlArr.push([title, url]);
+            }
         });
         return titlesAndUrlArr;
     } else {
@@ -80,7 +89,7 @@ app.get('/r/:subreddit/top', (req, res) => {
             res.status(500).send({message: INVALID_JSON_STRUCT_ERROR});
         } else {
             if (jsonData) {
-                jsonObject = {"Titles, Urls": relevantInfoArray}
+                jsonObject = {TITLES_AND_URLS: relevantInfoArray}
                 res.status(200).send({
                     jsonObject
                 })
@@ -93,5 +102,4 @@ app.get('/r/:subreddit/top', (req, res) => {
     });
 });
 
-module.exports = {sanitizeRedditData};
 
