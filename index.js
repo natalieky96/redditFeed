@@ -84,7 +84,7 @@ app.get('/r/:subreddit/top', (req, res) => {
     let jsonData, jsonObject;
     axios.get(fullUrl).then(response => {
         jsonData = response.data.data
-        relevantInfoArray = sanitizeRedditData(jsonData)
+        let relevantInfoArray = sanitizeRedditData(jsonData)
         if (!relevantInfoArray) {
             res.status(500).send({message: INVALID_JSON_STRUCT_ERROR});
         } else {
