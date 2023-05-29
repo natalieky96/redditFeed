@@ -2,21 +2,15 @@
  * Constants *
  *************/
 const {sanitizeRedditData} = require('./utils.js');
-// const {handleGetTopArticles} = require('./utils.js');
-// const SUBREDDIT_PARAM_MISSING_ERROR = 'subreddit parameter is missing!';
-// const INVALID_JSON_STRUCT_ERROR = "Invalid JSON structure!";
-// const UNAVAILABLE_JSON_FILE_ERROR = 'JSON isnt available!';
-// const PROBLEM_FETCHING_DATA_ERROR = 'Problem with fetching JSON data:';
 const {
     TITLES_AND_URLS, SANITIZE_VALID_DATA_TEST, SANITIZE_DATA_WITHOUT_TITLE_TEST,
     SANITIZE_DATA_WITHOUT_URL_TEST, INVALID_DATA
 } = require('./constants');
 
 
-// const express = require('express');
-// const app = express();
-// const axios = require('axios');
-
+/*********************************************
+ * Tests for the sanitizeRedditData function *
+ *********************************************/
 
 describe('sanitizeRedditData', () => {
 
@@ -66,4 +60,3 @@ describe('sanitizeRedditData', () => {
         expect(result).toEqual(expectedOutput);
     });
 });
-
