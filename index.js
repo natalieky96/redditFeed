@@ -5,13 +5,10 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 const axios = require('axios');
-const TITLE = 'title';
-const URL = 'url';
-const SUBREDDIT_PARAM_MISSING_ERROR = 'subreddit parameter is missing!';
-const INVALID_JSON_STRUCT_ERROR = "Invalid JSON structure!";
-const UNAVAILABLE_JSON_FILE_ERROR = 'JSON isnt available!';
-const PROBLEM_FETCHING_DATA_ERROR = 'Problem with fetching JSON data:';
-TITLES_AND_URLS = "Titles, Urls";
+const {
+    TITLE, URL, SUBREDDIT_PARAM_MISSING_OR_INVALID_ERROR, INVALID_JSON_STRUCT_ERROR,
+    UNAVAILABLE_JSON_FILE_ERROR, PROBLEM_FETCHING_DATA_ERROR
+} = require('./constants.js')
 
 // Fire up the API into the server
 app.listen(PORT,
@@ -30,11 +27,13 @@ app.use(express.json());
 const sanitizeRedditData = (jsonData) => {
     if (jsonData && jsonData.children) {
         let titlesAndUrlArr = []
+        //saves all the top articles we found
         const childrenArray = jsonData.children;
+        //take from every child just the title and url and push it to the return array
         childrenArray.forEach(child => {
             const childData = child.data;
-            if (!child.data || !childData[TITLE] ) {
-                titlesAndUrlArr= null;
+            if (!child.data || !childData[TITLE]) {
+                titlesAndUrlArr = null;
                 return null;
             }
             const title = childData[TITLE];
@@ -52,6 +51,17 @@ const sanitizeRedditData = (jsonData) => {
 };
 
 /**
+ * Check if a word is invalid for the url address using regex
+ * @param word the word we want to check
+ * @returns {boolean} True if it is valid, Otherwise False
+ */
+const validWord = (word) => {
+    //Check if the word includes space in the middle of a word
+    //Check if the word is just spaces or starts with spaces
+    return ((!(/\s/.test(word))) && (!(/^\s*$/.test(word))) && (!(/^\s/.test(word))));
+};
+
+/**
  URL: /r/:subreddit/top
  Method: GET
  Description: The client sends a GET request to retrieve the top posts of a specific subreddit.
@@ -64,24 +74,26 @@ const sanitizeRedditData = (jsonData) => {
  subreddit (string): The subreddit which we want to retrieve the top articles from
 
  Response
- Status: 200 OK, otherwise NOT OK
+ Status: 200 OK
  Body: The top {subreddit} articles titles and Urls.
 
  Error Handling
- Status: 400 Bad Request (invalid request message framing)
- Body: subreddit parameter is missing!
+ Status: 404 NOT FOUND (invalid request message framing)
+ Body: subreddit parameter is missing or invalid!
 
- Status: 500 Internal Server Error
- Body: JSON isnt available! / Invalid JSON structure!
+ Status: 500 Forbidden Error
+ Body: JSON isnt available! / Invalid JSON structure! /
 
  */
 app.get('/r/:subreddit/top', (req, res) => {
     const {subreddit} = req.params;
-    const fullUrl = `https://www.reddit.com/r/${subreddit}/top.json`;
-    if (!subreddit) {
-        res.status(400).send({message: SUBREDDIT_PARAM_MISSING_ERROR});
+    if (!subreddit || subreddit.length === 0 || !validWord(subreddit)) {
+        res.status(404).send({message: SUBREDDIT_PARAM_MISSING_OR_INVALID_ERROR});
     }
+    const fullUrl = `https://www.reddit.com/r/${subreddit}/top.json`;
     let jsonData, jsonObject;
+
+    //use axios to get the fullURL data as a JSON
     axios.get(fullUrl).then(response => {
         jsonData = response.data.data
         let relevantInfoArray = sanitizeRedditData(jsonData)
@@ -94,7 +106,7 @@ app.get('/r/:subreddit/top', (req, res) => {
                     jsonObject
                 })
             } else {
-                res.status(500).send({message: UNAVAILABLE_JSON_FILE_ERROR});
+                res.status(403).send({message: UNAVAILABLE_JSON_FILE_ERROR});
             }
         }
     }).catch(error => {

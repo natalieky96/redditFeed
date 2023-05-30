@@ -3,10 +3,9 @@
  *************/
 const {sanitizeRedditData} = require('./utils.js');
 const {
-    TITLES_AND_URLS, SANITIZE_VALID_DATA_TEST, SANITIZE_DATA_WITHOUT_TITLE_TEST,
+    SANITIZE_VALID_DATA_TEST, SANITIZE_DATA_WITHOUT_TITLE_TEST,
     SANITIZE_DATA_WITHOUT_URL_TEST, INVALID_DATA
 } = require('./constants');
-
 
 /*********************************************
  * Tests for the sanitizeRedditData function *

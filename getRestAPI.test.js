@@ -5,85 +5,94 @@ const express = require('express');
 const app = express();
 const PORT = 2000;
 const axios = require('axios');
-const {TITLES_AND_URLS} = require("./constants");
-const TITLE = 'title';
-const URL = 'url';
-const SUBREDDIT_PARAM_MISSING_ERROR = 'subreddit parameter is missing!';
-const INVALID_JSON_STRUCT_ERROR = "Invalid JSON structure!";
-const UNAVAILABLE_JSON_FILE_ERROR = 'JSON isnt available!';
-const PROBLEM_FETCHING_DATA_ERROR = 'Problem with fetching JSON data:';
+const {
+    INVALID_SUBREDDIT_SPACE_IN_START, INVALID_SUBREDDIT_SPACE_IN_MIDDLE, INVALID_SUBREDDIT_JUST_SPACE, VALID_URL,
+    SUBREDDIT_PARAM_MISSING_OR_INVALID_ERROR, INVALID_JSON_STRUCT_ERROR, UNAVAILABLE_JSON_FILE_ERROR
+} =
+    require('./constants');
+const {validWord, sanitizeRedditData} = require('./utils');
 
-
-const sanitizeRedditData = (jsonData) => {
-    if (jsonData && jsonData.children) {
-        let titlesAndUrlArr = []
-        const childrenArray = jsonData.children;
-        childrenArray.forEach(child => {
-            const childData = child.data;
-            if (!child.data || !childData[TITLE] ) {
-                titlesAndUrlArr= null;
-                return null;
-            }
-            const title = childData[TITLE];
-            if (!childData[URL]) {
-                titlesAndUrlArr.push([title]);
-            } else {
-                const url = childData[URL];
-                titlesAndUrlArr.push([title, url]);
-            }
-        });
-        return titlesAndUrlArr;
-    } else {
-        return null;
-    }
-};
-
-// CONTROLLER
-app.get('/r/:subreddit/top', async(req, res) => {
+/**************
+ * Controller *
+ **************/
+app.get('/r/:subreddit/top', async (req, res) => {
     // Fire up the API into the server
-    const { subreddit } = req.params;
-    if (!subreddit) {
-        return res.status(400).send({ message: SUBREDDIT_PARAM_MISSING_ERROR })
+    const {subreddit} = req.params;
+    if (!subreddit || subreddit.length === 0 || !validWord(subreddit)) {
+        return res.status(404).send({message: SUBREDDIT_PARAM_MISSING_OR_INVALID_ERROR})
     }
-    const { valid, message } = await getAPIHnadler(subreddit);
+    const {valid, message} = await getAPIHnadler(subreddit);
     if (!valid) return res.status(500).send(message);
     return res.status(200).send(message);
 });
 
-// SERVICE
+/**************
+ * Service *
+ **************/
 const getAPIHnadler = async (subreddit) => {
     if (!subreddit) return null;
-    let jsonData, jsonObject;
+    let jsonData;
 
     const fullUrl = `https://www.reddit.com/r/${subreddit}/top.json`;
     const response = await axios.get(fullUrl);
-    jsonData = response.data.data;
-
-    let releventinfoArray = sanitizeRedditData(jsonData);
-    if (!releventinfoArray) {
-        return { valid: false, message: INVALID_JSON_STRUCT_ERROR };
+    if (response) {
+        jsonData = response.data.data;
+        let releventinfoArray = sanitizeRedditData(jsonData);
+        if (!releventinfoArray) {
+            return {valid: false, message: INVALID_JSON_STRUCT_ERROR};
+        }
+        if (jsonData) {
+            return {valid: true, message: releventinfoArray}
+        }
     }
-    if (jsonData) {
-        jsonObject = { TITLES_AND_URLS: releventinfoArray }
-        return { valid: true, message: releventinfoArray }
-    }
-    return { valid: false, message: UNAVAILABLE_JSON_FILE_ERROR }
+    return {valid: false, message: UNAVAILABLE_JSON_FILE_ERROR}
 }
 
+/************
+ *   TEST   *
+ ************/
 describe('getApi Handler', () => {
 
-    it('check I get the right data from a valid URL', async () => {
+    it('check we get the right data from a valid URL', async () => {
         //Fire up the api
         app.listen(PORT,
             () => console.log(`It is online on : http://localhost:${PORT}`)
         )
         app.use(express.json());
 
-        const response = await axios.get('http://localhost:2000/r/blop/top');
+        const response = await axios.get(VALID_URL);
         let jsonData = response.data;
-        let jsonDataResponse = jsonData[TITLES_AND_URLS];
-
         expect(response.status).toBe(200);
-        expect(jsonData.message).toBeInstanceOf(Array);
+        expect(jsonData).toBeInstanceOf(Array);
+    });
+
+    //The invalid subreddit is a word contains just spaces = invalid
+    it('Check if we get 404 error code for invalid subreddit', async () => {
+        try {
+            await axios.get(INVALID_SUBREDDIT_JUST_SPACE);
+        } catch (error) {
+            expect(error.response.status).toBe(404);
+            expect(error.response.data.message).toBe(SUBREDDIT_PARAM_MISSING_OR_INVALID_ERROR);
+        }
+    });
+
+    //The invalid subreddit is a word contains space in the middle of the word = invalid
+    it('Check if we get 404 error code for invalid subreddit#2', async () => {
+        try {
+            await axios.get(INVALID_SUBREDDIT_SPACE_IN_MIDDLE);
+        } catch (error) {
+            expect(error.response.status).toBe(404);
+            expect(error.response.data.message).toBe(SUBREDDIT_PARAM_MISSING_OR_INVALID_ERROR);
+        }
+    });
+
+    //The invalid subreddit is a word contains space in the start of the word = invalid
+    it('Check if we get 404 error code for invalid subreddit#3', async () => {
+        try {
+            await axios.get(INVALID_SUBREDDIT_SPACE_IN_START);
+        } catch (error) {
+            expect(error.response.status).toBe(404);
+            expect(error.response.data.message).toBe(SUBREDDIT_PARAM_MISSING_OR_INVALID_ERROR);
+        }
     });
 });

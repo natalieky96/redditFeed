@@ -1,12 +1,16 @@
 /*************
  * Constants *
  *************/
-
-// const SUBREDDIT_PARAM_MISSING_ERROR = 'subreddit parameter is missing!';
-// const INVALID_JSON_STRUCT_ERROR = "Invalid JSON structure!";
-// const UNAVAILABLE_JSON_FILE_ERROR = 'JSON isnt available!';
-// const PROBLEM_FETCHING_DATA_ERROR = 'Problem with fetching JSON data:';
+const INVALID_SUBREDDIT_SPACE_IN_START = 'http://localhost:2000/r/ news/top';
+const INVALID_SUBREDDIT_SPACE_IN_MIDDLE = 'http://localhost:2000/r/h r/top';
+const INVALID_SUBREDDIT_JUST_SPACE = 'http://localhost:2000/r/blop/top';
+const VALID_URL = 'http://localhost:2000/r/blop/top';
+const SUBREDDIT_PARAM_MISSING_OR_INVALID_ERROR = 'subreddit parameter is missing or invalid!';
+const INVALID_JSON_STRUCT_ERROR = "Invalid JSON structure!";
+const UNAVAILABLE_JSON_FILE_ERROR = 'JSON isnt available!';
 const TITLES_AND_URLS = "Titles, Urls";
+const URL = 'url';
+const TITLE = 'title';
 
 const SANITIZE_VALID_DATA_TEST = [{
     "kind": "t3", data: {
@@ -49,6 +53,9 @@ const SANITIZE_DATA_WITHOUT_URL_TEST = [{
 const INVALID_DATA = ['bla'];
 
 module.exports = {
-    TITLES_AND_URLS, SANITIZE_VALID_DATA_TEST, SANITIZE_DATA_WITHOUT_TITLE_TEST,
+    INVALID_SUBREDDIT_SPACE_IN_START, INVALID_SUBREDDIT_SPACE_IN_MIDDLE, INVALID_SUBREDDIT_JUST_SPACE, VALID_URL,
+    SUBREDDIT_PARAM_MISSING_OR_INVALID_ERROR, INVALID_JSON_STRUCT_ERROR,
+    UNAVAILABLE_JSON_FILE_ERROR,
+    TITLES_AND_URLS, URL, TITLE, SANITIZE_VALID_DATA_TEST, SANITIZE_DATA_WITHOUT_TITLE_TEST,
     SANITIZE_DATA_WITHOUT_URL_TEST, INVALID_DATA
 };

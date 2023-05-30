@@ -1,14 +1,7 @@
-const axios = require("axios");
 /*************
  * Constants *
  *************/
-URL = 'url';
-TITLE = 'title';
-const SUBREDDIT_PARAM_MISSING_ERROR = 'subreddit parameter is missing!';
-const INVALID_JSON_STRUCT_ERROR = "Invalid JSON structure!";
-const UNAVAILABLE_JSON_FILE_ERROR = 'JSON isnt available!';
-const PROBLEM_FETCHING_DATA_ERROR = 'Problem with fetching JSON data:';
-TITLES_AND_URLS = "Titles, Urls";
+const {URL,TITLE} = require('./constants');
 
 /**
  * Process the given JSON data: Deletes all the irrelevant information,
@@ -22,8 +15,8 @@ const sanitizeRedditData = (jsonData) => {
         const childrenArray = jsonData.children;
         childrenArray.forEach(child => {
             const childData = child.data;
-            if (!child.data || !childData[TITLE] ) {
-                titlesAndUrlArr= null;
+            if (!child.data || !childData[TITLE]) {
+                titlesAndUrlArr = null;
                 return null;
             }
             const title = childData[TITLE];
@@ -40,59 +33,15 @@ const sanitizeRedditData = (jsonData) => {
     }
 };
 
-// const handleGetTopArticles = (req) => {
-//     const {subreddit} = req
-//     const fullUrl = `https://www.reddit.com/r/${subreddit}/top.json`;
-//     if (!subreddit) {
-//         return [SUBREDDIT_PARAM_MISSING_ERROR];
-//     }
-//     let jsonData, jsonObject;
-//     axios.get(fullUrl).then(response => {
-//         jsonData = response.data.data
-//         let relevantInfoArray = sanitizeRedditData(jsonData)
-//         if (!relevantInfoArray) {
-//             return [INVALID_JSON_STRUCT_ERROR];
-//         } else {
-//             if (jsonData) {
-//                 return relevantInfoArray;
-//             } else {
-//                return [UNAVAILABLE_JSON_FILE_ERROR];
-//             }
-//         }
-//     }).catch(error => {
-//         console.error(PROBLEM_FETCHING_DATA_ERROR, error);
-//     });
-// };
+/**
+ * Check if a word is invalid for the url address using regex
+ * @param word the word we want to check
+ * @returns {boolean} True if it is valid, Otherwise False
+ */
+const validWord = (word) => {
+    //Check if the word includes space in the middle of the word
+    //Check if the word is just spaces or starts with spaces
+    return ((!(/\s/.test(word))) && (!(/^\s*$/.test(word))) && (!(/^\s/.test(word))));
+};
 
-
-// const handleGetTopArticles = (req, res) => {
-//     const {subreddit} = req.params;
-//     const fullUrl = `https://www.reddit.com/r/${subreddit}/top.json`;
-//     if (!subreddit) {
-//         res.status(400).send({message: SUBREDDIT_PARAM_MISSING_ERROR});
-//     }
-//     let jsonData, jsonObject;
-//     axios.get(fullUrl).then(response => {
-//         jsonData = response.data.data
-//         let relevantInfoArray = sanitizeRedditData(jsonData)
-//         if (!relevantInfoArray) {
-//             res.status(500).send({message: INVALID_JSON_STRUCT_ERROR});
-//         } else {
-//             if (jsonData) {
-//                 jsonObject = {TITLES_AND_URLS: relevantInfoArray}
-//                 res.status(200).send({
-//                     jsonObject
-//                 })
-//             } else {
-//                 res.status(500).send({message: UNAVAILABLE_JSON_FILE_ERROR});
-//             }
-//         }
-//     }).catch(error => {
-//         console.error(PROBLEM_FETCHING_DATA_ERROR, error);
-//     });
-// }
-//
-//
-
-module.exports = {sanitizeRedditData};
-// module.exports = {handleGetTopArticles};
+module.exports = {sanitizeRedditData, validWord};
