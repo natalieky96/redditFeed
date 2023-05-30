@@ -5,6 +5,19 @@ The framework I used was Express with Node.js in the WebStorm IDE.
 For testing I used the Jest Framework.
 To view the output data body, I utilized a REST client called "Insomnia."
 
+## Instructions on how to launch my application on the cloud:
+I deployed my app to Vercel:
+https://top-subreddit-articles.vercel.app/
+
+To run it, you can write (for example):
+
+https://top-subreddit-articles.vercel.app/r/news/top
+
+or
+
+https://top-subreddit-articles.vercel.app/r/n%20%20p/top
+(For invalid url)
+
 ## Instructions on how to launch my application locally:
 - Open the "index.js" file
 - Download if needed the following: express (execute the command in the terminal: npm install express),and axios (npm install axios fs)   
