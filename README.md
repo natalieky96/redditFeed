@@ -7,9 +7,9 @@ To view the output data body, I utilized a REST client called "Insomnia."
 
 ## Instructions on how to launch my application locally:
 - Open the "index.js" file
-- Download if needed the following: express (write in the terminal: npm install express),and axios (npm install axios fs)   
+- Download if needed the following: express (execute the command in the terminal: npm install express),and axios (npm install axios fs)   
 (For testing you need to download jest with the command: npm install --save-dev jest)
-- Run the program by writing "node ." in the terminal. You should get this message: "It is online on : http://localhost:3000"
+- Run the program by execute the command "node ." in the terminal. You should get this message: "It is online on : http://localhost:3000"
 - I used "Insomnia" for better visibility, you can use a regular browser, for the subreddit 'news' write: "http://localhost:3000/r/news/top" 
 (you can modify it for any other subreddit).
 For example:
@@ -23,8 +23,9 @@ This application provides an API endpoint that allows clients to retrieve the to
 My application includes the following files:
 * index.js - The main file which we run
 * constants.js - A file which includes the constants variables some of the other files use
-* utils.js - A helper file for the 'sanitize.test.js', it includes the function - "sanitizeRedditData"
+* utils.js - A helper file for the test files, it includes the functions - "sanitizeRedditData", "validWord"
 * sanitize.test.js - Test file for testing the "sanitizeRedditData" function
+* getRestApi.test.js - Test file for testing the getAPI call (END2END)
 
 ### Functionality:
 I will focusing on the main file index.js. First, I wanted to fire up the api into the server. Then, I used middleware to make every request a JSON.
@@ -37,7 +38,26 @@ Then:
 
 
 ## Test
-After you downloaded the jest framework, go to the test file you want to run and write in the terminal 'npm test'. You should get:
+After downloading the Jest framework, In the terminal, execute the command 'npm test test-file-name.js' to run the specific test file. 
+You can also press the '>' button near the 'describe' in the IDE you use:
+
+![image](https://github.com/natalieky96/redditFeed/assets/62475562/dca36203-1ccb-4f77-9d8d-f8457c827c98)
+
+
+*Don't!!* run 'npm test' alone as it can cause collisions and lead to non-functional tests.
+Then, you should get:
+
+![image](https://github.com/natalieky96/redditFeed/assets/62475562/1eca3f75-0638-466d-b33e-b342104130be)
+
+and:
+
+![image](https://github.com/natalieky96/redditFeed/assets/62475562/ea1da6e2-5991-44e7-8c8d-0e90989f5ae0)
+
+
+
+
+
+
 
 
 
