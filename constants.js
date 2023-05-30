@@ -1,9 +1,13 @@
 /*************
  * Constants *
  *************/
+const EXPECTED_OUTPUT_DATA_WITHOUT_URL_TEST=[["Derrick White barely beats the buzzer and forces a game 7!"]];
+const EXPECTED_OUTPUT_VALID_DATA= [["[Highlight] Derrick White barely beats the buzzer and forces a game 7!",
+    "https://streamable.com/p0udq1"]];
+
 const INVALID_SUBREDDIT_SPACE_IN_START = 'http://localhost:2000/r/ news/top';
 const INVALID_SUBREDDIT_SPACE_IN_MIDDLE = 'http://localhost:2000/r/h r/top';
-const INVALID_SUBREDDIT_JUST_SPACE = 'http://localhost:2000/r/blop/top';
+const INVALID_SUBREDDIT_JUST_SPACE = 'http://localhost:2000/r/    /top';
 const VALID_URL = 'http://localhost:2000/r/blop/top';
 const SUBREDDIT_PARAM_MISSING_OR_INVALID_ERROR = 'subreddit parameter is missing or invalid!';
 const INVALID_JSON_STRUCT_ERROR = "Invalid JSON structure!";
@@ -53,6 +57,7 @@ const SANITIZE_DATA_WITHOUT_URL_TEST = [{
 const INVALID_DATA = ['bla'];
 
 module.exports = {
+    EXPECTED_OUTPUT_DATA_WITHOUT_URL_TEST, EXPECTED_OUTPUT_VALID_DATA,
     INVALID_SUBREDDIT_SPACE_IN_START, INVALID_SUBREDDIT_SPACE_IN_MIDDLE, INVALID_SUBREDDIT_JUST_SPACE, VALID_URL,
     SUBREDDIT_PARAM_MISSING_OR_INVALID_ERROR, INVALID_JSON_STRUCT_ERROR,
     UNAVAILABLE_JSON_FILE_ERROR,

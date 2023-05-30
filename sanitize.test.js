@@ -3,6 +3,7 @@
  *************/
 const {sanitizeRedditData} = require('./utils.js');
 const {
+    EXPECTED_OUTPUT_DATA_WITHOUT_URL_TEST, EXPECTED_OUTPUT_VALID_DATA,
     SANITIZE_VALID_DATA_TEST, SANITIZE_DATA_WITHOUT_TITLE_TEST,
     SANITIZE_DATA_WITHOUT_URL_TEST, INVALID_DATA
 } = require('./constants');
@@ -20,8 +21,7 @@ describe('sanitizeRedditData', () => {
             children:
             SANITIZE_VALID_DATA_TEST
         };
-        const expectedOutput = [["[Highlight] Derrick White barely beats the buzzer and forces a game 7!",
-            "https://streamable.com/p0udq1"]];
+        const expectedOutput = EXPECTED_OUTPUT_VALID_DATA;
 
         const result = sanitizeRedditData(exampleJsonData);
         expect(result).toEqual(expectedOutput);
@@ -53,7 +53,7 @@ describe('sanitizeRedditData', () => {
 
     it('retrieve the title without the url', async () => {
         const exampleJsonData = {children: SANITIZE_DATA_WITHOUT_URL_TEST};
-        const expectedOutput = [["Derrick White barely beats the buzzer and forces a game 7!"]];
+        const expectedOutput = EXPECTED_OUTPUT_DATA_WITHOUT_URL_TEST;
 
         const result = sanitizeRedditData(exampleJsonData);
         expect(result).toEqual(expectedOutput);
