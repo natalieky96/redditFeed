@@ -69,7 +69,11 @@ describe('getApi Handler', () => {
     //The invalid subreddit is a word contains just spaces = invalid
     it('Check if we get 404 error code for invalid subreddit', async () => {
         try {
-            await axios.get(INVALID_SUBREDDIT_JUST_SPACE);
+            const response = await axios.get(INVALID_SUBREDDIT_JUST_SPACE);
+            if (response.status === 200) {
+                // Fail the test if a valid response with status 200 is received
+                expect(response.status).not.toBe(200);
+            }
         } catch (error) {
             expect(error.response.status).toBe(404);
             expect(error.response.data.message).toBe(SUBREDDIT_PARAM_MISSING_OR_INVALID_ERROR);
@@ -79,7 +83,11 @@ describe('getApi Handler', () => {
     //The invalid subreddit is a word contains space in the middle of the word = invalid
     it('Check if we get 404 error code for invalid subreddit#2', async () => {
         try {
-            await axios.get(INVALID_SUBREDDIT_SPACE_IN_MIDDLE);
+            const response = await axios.get(INVALID_SUBREDDIT_SPACE_IN_MIDDLE);
+            if (response.status === 200) {
+                // Fail the test if a valid response with status 200 is received
+                expect(response.status).not.toBe(200);
+            }
         } catch (error) {
             expect(error.response.status).toBe(404);
             expect(error.response.data.message).toBe(SUBREDDIT_PARAM_MISSING_OR_INVALID_ERROR);
@@ -89,7 +97,11 @@ describe('getApi Handler', () => {
     //The invalid subreddit is a word contains space in the start of the word = invalid
     it('Check if we get 404 error code for invalid subreddit#3', async () => {
         try {
-            await axios.get(INVALID_SUBREDDIT_SPACE_IN_START);
+            const response = await axios.get(INVALID_SUBREDDIT_SPACE_IN_START);
+            if (response.status === 200) {
+                // Fail the test if a valid response with status 200 is received
+                expect(response.status).not.toBe(200);
+            }
         } catch (error) {
             expect(error.response.status).toBe(404);
             expect(error.response.data.message).toBe(SUBREDDIT_PARAM_MISSING_OR_INVALID_ERROR);
