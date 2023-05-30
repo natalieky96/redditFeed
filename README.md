@@ -13,9 +13,13 @@ To view the output data body, I utilized a REST client called "Insomnia."
 - I used "Insomnia" for better visibility, you can use a regular browser, for the subreddit 'news' write: "http://localhost:3000/r/news/top" 
 (you can modify it for any other subreddit).
 For example:
-![image](https://github.com/natalieky96/redditFeed/assets/62475562/8bb92bc9-a4a8-477f-a18e-9710a2ee7427)
+
+![image](https://github.com/natalieky96/redditFeed/assets/62475562/24d37833-f689-4296-a25a-6a50a3d33c93)
+
 - Press enter/send and you should get all the titles and urls of the top articles from the 'news' subreddit.
-![image](https://github.com/natalieky96/redditFeed/assets/62475562/8d9d44ef-1192-4edc-816b-ec1bd1a815c7)
+
+![image](https://github.com/natalieky96/redditFeed/assets/62475562/2c93b000-fcb2-48eb-8958-51898025ca6f)
+
 
 ## An overview of how my application works
 This application provides an API endpoint that allows clients to retrieve the top posts from a specific subreddit on Reddit. The API returns the titles and URLs of the top posts in JSON format.
@@ -41,17 +45,17 @@ Then:
 After downloading the Jest framework, In the terminal, execute the command 'npm test test-file-name.js' to run the specific test file. 
 You can also press the '>' button near the 'describe' in the IDE you use:
 
-![image](https://github.com/natalieky96/redditFeed/assets/62475562/dca36203-1ccb-4f77-9d8d-f8457c827c98)
-
+![image](https://github.com/natalieky96/redditFeed/assets/62475562/e548bdf0-d127-414e-9d32-2462707dfe9d)
 
 *Don't!!* run 'npm test' alone as it can cause collisions and lead to non-functional tests.
 Then, you should get:
 
-![image](https://github.com/natalieky96/redditFeed/assets/62475562/1eca3f75-0638-466d-b33e-b342104130be)
+![image](https://github.com/natalieky96/redditFeed/assets/62475562/d2707535-86e4-49b5-858e-cbc07687ff66)
 
 and:
 
-![image](https://github.com/natalieky96/redditFeed/assets/62475562/ea1da6e2-5991-44e7-8c8d-0e90989f5ae0)
+![image](https://github.com/natalieky96/redditFeed/assets/62475562/ed5b0402-63db-4ff4-ac8e-df7cbca2a61b)
+
 
 
 
