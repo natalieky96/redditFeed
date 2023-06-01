@@ -16,7 +16,6 @@ const {validWord, sanitizeRedditData} = require('./utils');
  * Controller *
  **************/
 app.get('/r/:subreddit/top', async (req, res) => {
-    // Fire up the API into the server
     const {subreddit} = req.params;
     if (!subreddit || subreddit.length === 0 || !validWord(subreddit)) {
         return res.status(404).send({message: SUBREDDIT_PARAM_MISSING_OR_INVALID_ERROR})
